@@ -23,7 +23,28 @@ class Target:
           for j in range(i+1, len(self.points)):
               if is_connected(self.points[i], self.points[j]):
                   self.uf.union(i, j)
-
+       # find the two groups with the most members
+      largestA, largestB = 0, 0
+      for i in range(len(self.uf.size)):
+          if self.uf.size[i] > self.uf.size[largestA]:
+              largestB = largestA
+              largestA = i
+          elif self.uf.size[i] > self.uf.size[largestB]:
+              largestB = i
+      groupA, groupB = [], []
+      for i in range(len(self.points)):
+          if self.uf.find(i) == largestA:
+              groupA.append(i)
+          else:
+              groupB.append(i)
+      # find the center point by average all points in the area
+      x_sum, y_sum = 0, 0
+      for i in groupB:
+          x_sum += self.points[i][0]
+          y_sum += self.points[i][1]
+      self.center = (round(x_sum/len(groupB)), round(y_sum/len(groupB)))
+      self.borders = groupA
+      self.centers = groupB
 
   def __str__(self):
       res = ""
