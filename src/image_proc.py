@@ -1,4 +1,5 @@
 from PIL import Image, ImageFilter
+import cv2 as cv
 import numpy as np
 import sys
 from union_find import UnionFind
@@ -54,7 +55,10 @@ class Target:
       return res
 
 def read_image(path):
-    return np.array(Image.open(path).convert('L'))
+    orig_img = 255 - cv.cvtColor(cv.imread(path), cv.COLOR_BGR2GRAY)
+    kernel = np.ones((4,4), np.uint8)
+    erode = cv.erode(orig_img, kernel, iterations=1)
+    return 255 - erode
 def write_image(path, img_np):
     Image.fromarray(img_np).save(path)
 
@@ -65,5 +69,4 @@ if __name__ == "__main__":
   img_np = read_image(sys.argv[1])
   print(img_np.shape)
   t = Target(img_np)
-  #print(t)
-  #Image.fromarray(img_np).show()
+  print(t)
