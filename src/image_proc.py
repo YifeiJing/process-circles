@@ -70,9 +70,17 @@ def make_image(size, res_points, center, sample_points):
         img[sample_points[i][0], sample_points[i][1]] = 0
     def make_center(c):
         img[c[0] - 1, c[1]] = 0
+        img[c[0] - 1, c[1]-1] = 0
+        img[c[0] - 1, c[1]+1] = 0
         img[c[0] + 1, c[1]] = 0
+        img[c[0] + 1, c[1]+1] = 0
+        img[c[0] + 1, c[1]-1] = 0
         img[c[0], c[1] - 1] = 0
         img[c[0], c[1] + 1] = 0
+        img[c[0] - 2, c[1]] = 0
+        img[c[0] + 2, c[1]] = 0
+        img[c[0], c[1] + 2] = 0
+        img[c[0], c[1] - 2] = 0
         img[c] = 0
     make_center(center)
     cv.imwrite('result.jpg', img)

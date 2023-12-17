@@ -23,3 +23,4 @@ if __name__ == "__main__":
   for i in t2.borders:
       sample_points.append((t2.points[i][0] - diff_a, t2.points[i][1] - diff_b))
   ip.make_image((2000,3000), new_circle_points, new_circle_center, sample_points)
+  print("Finished without error. Can check result.jpg")
