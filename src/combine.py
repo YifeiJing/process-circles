@@ -9,30 +9,30 @@ class Element:
         self.tan = b / a
 
 def compute_target(resu):
-    center = (resu[7], resu[4])
+    center = (1000, 1500)
     points = []
     for i in range(4):
         u = resu[i]
         for e in u:
             if i == 0:
-                p = (center[0] + e.a, center[1] - e.b)
+                p = (center[0] + e.b, center[1] + e.a)
                 points.append(p)
             elif i == 1:
-                p = (center[0] + e.a, center[1] + e.b)
+                p = (center[0] - e.b, center[1] + e.a)
                 points.append(p)
             elif i == 2:
-                p = (center[0] - e.a, center[1] + e.b)
+                p = (center[0] - e.b, center[1] - e.a)
                 points.append(p)
             elif i == 3:
-                p = (center[0] - e.a, center[1] - e.b)
+                p = (center[0] + e.b, center[1] - e.a)
                 points.append(p)
-    p = (center[0], center[1] - resu[4])
+    p = (center[0] - resu[4], center[1])
     points.append(p)
-    p = (center[0], center[1] + resu[6])
+    p = (center[0], center[1] + resu[5])
     points.append(p)
-    p = (center[0] - resu[5], center[1])
+    p = (center[0] + resu[6], center[1])
     points.append(p)
-    p = (center[1] - resu[7], center[1]) 
+    p = (center[0], center[1] - resu[7]) 
     points.append(p)
     return (center, points)
 
@@ -41,7 +41,7 @@ def compute_attr(target):
     N, E, S, W = 0, 0, 0, 0
     for i in target.borders:
         p = target.points[i]
-        dx, dy = p[0] - target.center[0], p[1] - target.center[1]
+        dy, dx = p[0] - target.center[0], p[1] - target.center[1]
         if  dx > 0:
             if dy > 0:
                 e = Element(dx, dy)
@@ -80,7 +80,7 @@ def combine(r1, r2, tolerance=1e-4):
             if ru1[i1].tan <= pole:
                 if ru2[i2].tan <= pole:
                     a, b = (ru1[i1].a + ru2[i2].a)/2, (ru1[i1].b + ru2[i2].b)/2
-                    e = Element(a, b)
+                    e = Element(round(a), round(b))
                     resu.append(e)
                     i1 += 1
                     i2 += 1
@@ -88,7 +88,7 @@ def combine(r1, r2, tolerance=1e-4):
                     tmpi = i2 - 1
                     if tmpi < 0: tmpi = 0
                     a, b = (ru1[i1].a + ru2[tmpi].a)/2, (ru1[i1].b + ru2[tmpi].b)/2
-                    e = Element(a, b)
+                    e = Element(round(a), round(b))
                     resu.append(e)
                     i1 += 1
             else:
@@ -96,7 +96,7 @@ def combine(r1, r2, tolerance=1e-4):
                     tmpi = i1 - 1
                     if tmpi < 0: tmpi = 0
                     a, b = (ru1[tmpi].a + ru2[i2].a)/2, (ru1[tmpi].b + ru2[i2].b)/2
-                    e = Element(a, b)
+                    e = Element(round(a), round(b))
                     resu.append(e)
                     i2 += 1
                 else:
@@ -106,6 +106,6 @@ def combine(r1, r2, tolerance=1e-4):
     for i in range(4):
         res_u.append(combine_u(r1[i], r2[i]))
     for i in range(4,8):
-        res_d.append((r1[i] + r2[i])/2)
+        res_d.append(round((r1[i] + r2[i])/2))
 
     return (res_u[0], res_u[1], res_u[2], res_u[3], res_d[0], res_d[1], res_d[2], res_d[3])

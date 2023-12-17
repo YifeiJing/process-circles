@@ -7,9 +7,10 @@ from union_find import UnionFind
 class Target:
   def __init__(self, img_np):
       (x,y) = img_np.shape
+      print(f"Image size: {img_np.shape}")
       self.points = []
       for i in range(x):
-          for j in range(y):
+         for j in range(y):
               if img_np[i,j] == 0:
                   self.points.append((i,j))
       self.uf = UnionFind(len(self.points))
@@ -44,6 +45,7 @@ class Target:
           x_sum += self.points[i][0]
           y_sum += self.points[i][1]
       self.center = (round(x_sum/len(groupB)), round(y_sum/len(groupB)))
+      print(f"Center detected: {self.center}")
       self.borders = groupA
       self.centers = groupB
 
@@ -59,6 +61,22 @@ def read_image(path):
     kernel = np.ones((4,4), np.uint8)
     erode = cv.erode(orig_img, kernel, iterations=1)
     return 255 - erode
+
+def make_image(size, res_points, center, sample_points):
+    img = np.ones(size, dtype=np.uint8) * 255
+    for i in range(len(res_points)):
+        img[res_points[i][0], res_points[i][1]] = 128
+    for i in range(len(sample_points)):
+        img[sample_points[i][0], sample_points[i][1]] = 0
+    def make_center(c):
+        img[c[0] - 1, c[1]] = 0
+        img[c[0] + 1, c[1]] = 0
+        img[c[0], c[1] - 1] = 0
+        img[c[0], c[1] + 1] = 0
+        img[c] = 0
+    make_center(center)
+    cv.imwrite('result.jpg', img)
+
 def write_image(path, img_np):
     Image.fromarray(img_np).save(path)
 
@@ -68,5 +86,6 @@ if __name__ == "__main__":
     sys.exit(1)
   img_np = read_image(sys.argv[1])
   print(img_np.shape)
-  t = Target(img_np)
-  print(t)
+  #t = Target(img_np)
+  #print(t)
+  make_image((120, 100), [(10,10), (100, 90), (0,0), (1,0), (2,0)], (50, 50))
