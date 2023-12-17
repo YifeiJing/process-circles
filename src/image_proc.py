@@ -13,6 +13,7 @@ class Target:
          for j in range(y):
               if img_np[i,j] == 0:
                   self.points.append((i,j))
+      print(f"Processing {len(self.points)} points")
       self.uf = UnionFind(len(self.points))
       def is_connected(p1, p2):
           x_diff, y_diff = abs(p1[0] - p2[0]), abs(p1[1] - p2[1])
