@@ -1,4 +1,3 @@
-from PIL import Image, ImageFilter
 import cv2 as cv
 import numpy as np
 import sys
@@ -85,9 +84,6 @@ def make_image(size, res_points, center, sample_points):
         img[c] = 0
     make_center(center)
     cv.imwrite('result.jpg', img)
-
-def write_image(path, img_np):
-    Image.fromarray(img_np).save(path)
 
 if __name__ == "__main__":
   if len(sys.argv) != 2:
