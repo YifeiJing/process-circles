@@ -1,3 +1,2 @@
-Pillow
 numpy
-unionfind
+opencv-python
